@@ -24,4 +24,12 @@ class Produto{
     public function setPreco($preco){ $this->preco = $preco;}
     public function setDescricao($descricao){ $this->descricao = $descricao;}
     public function setStatus($status){ $this->status = $status;}
+    public function salvar(){
+        $stmt = $this->pdo->prepare("INSERT INTO produto (nome, preco, descricao, status) VALUES (:nome, :preco, :descricao, :status)");
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":preco", $this->preco);
+        $stmt->bindParam(":descricao", $this->descricao);
+        $stmt->bindParam(":status", $this->status);
+        return $stmt->execute();
+    }
 }

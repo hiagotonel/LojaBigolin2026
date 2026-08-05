@@ -17,4 +17,10 @@ class setor{
     public function setID($id_setor){ $this->id_setor = $id_setor;}
     public function setNome($nome){ $this->nome = $nome;}
     public function setDescricao($descricao){ $this->descricao = $descricao;}
+    public function salvar(){
+        $stmt = $this->pdo->prepare("INSERT INTO setor (nome, descricao) VALUES (:nome, :descricao)");
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":descricao", $this->descricao);
+        return $stmt->execute();
+    }
 }
