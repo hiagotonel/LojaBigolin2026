@@ -9,8 +9,6 @@ $cpf = $_POST[":cpf"];
 $telefone = $_POST[":telefone"];
 $email = $_POST[":email"];
 
-
-
 $stmt->execute([
     ':nome' => $nome,
     ':cpf' => $cpf,

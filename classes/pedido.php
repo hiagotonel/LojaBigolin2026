@@ -24,11 +24,22 @@ class pedido{
     public function setQuantidade($quantidade){ $this->quantidade = $quantidade;}
     public function setStatus($status){ $this->status = $status;}
     public function salvar(){
-        $stmt = $this->pdo->prepare("INSERT INTO pedido (data, preco, quantidade, status) VALUES (:data, :preco, :quantidade, :status)");
-        $stmt->bindParam(":data", $this->data);
-        $stmt->bindParam(":preco", $this->preco);
-        $stmt->bindParam(":quantidade", $this->quantidade);
-        $stmt->bindParam(":status", $this->status);
+        if($this->id_pedido){
+            $stmt = $this->pdo->prepare("UPDATE pedido SET data=:data, preco=:preco, quantidade=:quantidade, status=:status WHERE id_pedido=:id_pedido");
+            $stmt->bindParam(":id_pedido", $this->id_pedido);
+            $stmt->bindParam(":data", $this->data);
+            $stmt->bindParam(":preco", $this->preco);
+            $stmt->bindParam(":quantidade", $this->quantidade);
+            $stmt->bindParam(":status", $this->status);
+        }
+        else{
+            $stmt = $this->pdo->prepare("INSERT INTO pedido (data, preco, quantidade, status) VALUES (:data, :preco, :quantidade, :status)");
+            $stmt->bindParam(":data", $this->data);
+            $stmt->bindParam(":preco", $this->preco);
+            $stmt->bindParam(":quantidade", $this->quantidade);
+            $stmt->bindParam(":status", $this->status);
+        }
+        
         return $stmt->execute();
     }
 }

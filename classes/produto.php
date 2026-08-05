@@ -25,11 +25,21 @@ class Produto{
     public function setDescricao($descricao){ $this->descricao = $descricao;}
     public function setStatus($status){ $this->status = $status;}
     public function salvar(){
-        $stmt = $this->pdo->prepare("INSERT INTO produto (nome, preco, descricao, status) VALUES (:nome, :preco, :descricao, :status)");
-        $stmt->bindParam(":nome", $this->nome);
-        $stmt->bindParam(":preco", $this->preco);
-        $stmt->bindParam(":descricao", $this->descricao);
-        $stmt->bindParam(":status", $this->status);
+        if($this->id_produto){
+            $stmt = $this->pdo->prepare("UPDATE produto SET nome=:nome, preco=:preco, descricao=:descricao, status=:status WHERE id_produto=:id_produto");
+            $stmt->bindParam(":id_produto", $this->id_produto);
+            $stmt->bindParam(":nome", $this->nome);
+            $stmt->bindParam(":preco", $this->preco);
+            $stmt->bindParam(":descricao", $this->descricao);
+            $stmt->bindParam(":status", $this->status);
+        }
+        else{
+            $stmt = $this->pdo->prepare("INSERT INTO produto (nome, preco, descricao, status) VALUES (:nome, :preco, :descricao, :status)");
+            $stmt->bindParam(":nome", $this->nome);
+            $stmt->bindParam(":preco", $this->preco);
+            $stmt->bindParam(":descricao", $this->descricao);
+            $stmt->bindParam(":status", $this->status);
+        }
         return $stmt->execute();
     }
 }
