@@ -51,13 +51,13 @@ class pedido{
         return $stmt->execute();
     }
     public function select(){
-        $stmt = $this->pdo->prepare("SELECT * FROM setor WHERE id_setor = :id");
+        $stmt = $this->pdo->prepare("SELECT * FROM pedido WHERE id_pedido = :id");
         $stmt->bindParam(":id", $this->id_pedido);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public static function selectAll(){
-        $stmt = getConexao()->query("SELECT * FROM setor");
+        $stmt = getConexao()->query("SELECT * FROM pedido");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

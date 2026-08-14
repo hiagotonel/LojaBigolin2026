@@ -26,12 +26,7 @@ class Produto{
     public function setStatus($status){ $this->status = $status;}
     public function salvar(){
         if($this->id_produto){
-            $stmt = $this->pdo->prepare("UPDATE produto SET nome=:nome, preco=:preco, descricao=:descricao, status=:status WHERE id_produto=:id_produto");
-            $stmt->bindParam(":id_produto", $this->id_produto);
-            $stmt->bindParam(":nome", $this->nome);
-            $stmt->bindParam(":preco", $this->preco);
-            $stmt->bindParam(":descricao", $this->descricao);
-            $stmt->bindParam(":status", $this->status);
+            $this->update();
         }
         else{
             $stmt = $this->pdo->prepare("INSERT INTO produto (nome, preco, descricao, status) VALUES (:nome, :preco, :descricao, :status)");
@@ -41,5 +36,30 @@ class Produto{
             $stmt->bindParam(":status", $this->status);
         }
         return $stmt->execute();
+    }
+
+    public function delete(){
+        $stmt = $this->pdo->prepare("DELETE FROM produto WHERE id_produto = :id");
+        $stmt->bindParam(":id", $id_produto);
+        return $stmt->execute();
+    }
+    public function update(){
+        $stmt = $this->pdo->prepare("UPDATE produto SET nome = :nome, preco = :preco, descricao = :descricao, status = :status WHERE id_produto = :id");
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":preco", $this->preco);
+        $stmt->bindParam(":descricao", $this->descricao);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":id", $this->id_produto);
+        return $stmt->execute();
+    }
+    public function select(){
+        $stmt = $this->pdo->prepare("SELECT * FROM produto WHERE id_produto = :id");
+        $stmt->bindParam(":id", $this->id_produto);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public static function selectAll(){
+        $stmt = getConexao()->query("SELECT * FROM produto");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
