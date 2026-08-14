@@ -17,10 +17,10 @@ class setor{
     public function setID($id_setor){ $this->id_setor = $id_setor;}
     public function setNome($nome){ $this->nome = $nome;}
     public function setDescricao($descricao){ $this->descricao = $descricao;}
-    public function salvar(){
+    public function insert(){
         if($this->id_setor){
-            $stmt = $this->pdo->prepare("UPDATE setor SET nome=:nome, descricao=:descricao WHERE id_setor=:id_setor");
-            $stmt->bindParam(":id_setor", $this->id_setor);
+            $stmt = $this->pdo->prepare("UPDATE setor SET nome=:nome, descricao=:descricao WHERE id_setor=:id");
+            $stmt->bindParam(":id", $this->id_setor);
             $stmt->bindParam(":nome", $this->nome);
             $stmt->bindParam(":descricao", $this->descricao);
         }
@@ -30,5 +30,27 @@ class setor{
             $stmt->bindParam(":descricao", $this->descricao);
         }
         return $stmt->execute();
+    }
+    public function delete(){
+        $stmt = $this->pdo->prepare("DELETE FROM setor WHERE id_setor = :id");
+        $stmt->bindParam(":id", $id_setor);
+        return $stmt->execute();
+    }
+    public function update($id){
+        $stmt = $this->pdo->prepare("UPDATE setor SET nome = :nome, descricao = :descricao WHERE id_setor = :id");
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":descricao", $this->descricao);
+        $stmt->bindParam(":id", $id);
+        return $stmt->execute();
+    }
+    public function select($id){
+        $stmt = $this->pdo->prepare("SELECT * FROM setor WHERE id_setor = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function selectAll(){
+        $stmt = $this->pdo->query("SELECT * FROM setor");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
