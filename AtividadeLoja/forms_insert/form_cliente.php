@@ -1,5 +1,5 @@
 <?php
-require_once 'conexao.php';
+require_once '../conexao.php';
 if (isset($_GET['id_cliente'])){
     extract($_GET);
     $acao = "../update/update_cliente.php?id_cliente=$id_cliente";
