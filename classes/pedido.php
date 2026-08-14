@@ -25,12 +25,7 @@ class pedido{
     public function setStatus($status){ $this->status = $status;}
     public function salvar(){
         if($this->id_pedido){
-            $stmt = $this->pdo->prepare("UPDATE pedido SET data=:data, preco=:preco, quantidade=:quantidade, status=:status WHERE id_pedido=:id_pedido");
-            $stmt->bindParam(":id_pedido", $this->id_pedido);
-            $stmt->bindParam(":data", $this->data);
-            $stmt->bindParam(":preco", $this->preco);
-            $stmt->bindParam(":quantidade", $this->quantidade);
-            $stmt->bindParam(":status", $this->status);
+            $this->update();
         }
         else{
             $stmt = $this->pdo->prepare("INSERT INTO pedido (data, preco, quantidade, status) VALUES (:data, :preco, :quantidade, :status)");
@@ -39,7 +34,30 @@ class pedido{
             $stmt->bindParam(":quantidade", $this->quantidade);
             $stmt->bindParam(":status", $this->status);
         }
-        
         return $stmt->execute();
+    }
+    public function delete(){
+        $stmt = $this->pdo->prepare("DELETE FROM pedido WHERE id_pedido = :id");
+        $stmt->bindParam(":id", $id_pedido);
+        return $stmt->execute();
+    }
+    public function update(){
+        $stmt = $this->pdo->prepare("UPDATE pedido SET data = :data, preco = :preco, quantidade = :quantidade, status = :status WHERE id_pedido = :id");
+        $stmt->bindParam(":data", $this->data);
+        $stmt->bindParam(":preco", $this->preco);
+        $stmt->bindParam(":quantidade", $this->quantidade);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":id", $this->id_pedido);
+        return $stmt->execute();
+    }
+    public function select(){
+        $stmt = $this->pdo->prepare("SELECT * FROM setor WHERE id_setor = :id");
+        $stmt->bindParam(":id", $this->id_pedido);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public static function selectAll(){
+        $stmt = getConexao()->query("SELECT * FROM setor");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
