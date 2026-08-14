@@ -23,7 +23,7 @@ class pedido{
     public function setPreco($preco){ $this->preco = $preco;}
     public function setQuantidade($quantidade){ $this->quantidade = $quantidade;}
     public function setStatus($status){ $this->status = $status;}
-    public function salvar(){
+    public function insert(){
         if($this->id_pedido){
             $this->update();
         }
@@ -38,7 +38,7 @@ class pedido{
     }
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM pedido WHERE id_pedido = :id");
-        $stmt->bindParam(":id", $id_pedido);
+        $stmt->bindParam(":id", $this->id_pedido);
         return $stmt->execute();
     }
     public function update(){

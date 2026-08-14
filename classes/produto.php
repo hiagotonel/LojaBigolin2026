@@ -24,7 +24,7 @@ class Produto{
     public function setPreco($preco){ $this->preco = $preco;}
     public function setDescricao($descricao){ $this->descricao = $descricao;}
     public function setStatus($status){ $this->status = $status;}
-    public function salvar(){
+    public function insert(){
         if($this->id_produto){
             $this->update();
         }
@@ -40,7 +40,7 @@ class Produto{
 
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM produto WHERE id_produto = :id");
-        $stmt->bindParam(":id", $id_produto);
+        $stmt->bindParam(":id", $this->id_produto);
         return $stmt->execute();
     }
     public function update(){

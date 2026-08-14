@@ -30,7 +30,7 @@ class setor{
     }
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM setor WHERE id_setor = :id");
-        $stmt->bindParam(":id", $id_setor);
+        $stmt->bindParam(":id", $this->id_setor);
         return $stmt->execute();
     }
     public function update(){

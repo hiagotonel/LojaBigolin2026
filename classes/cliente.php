@@ -25,7 +25,7 @@ class cliente{
     public function setCpf($cpf){ $this->cpf = $cpf;}
     public function setTelefone($telefone){ $this->telefone = $telefone;}
     public function setEmail($email){ $this->email = $email;}
-    public function salvar(){
+    public function insert(){
         if($this->id_cliente){
             $this->update();
         }
@@ -40,7 +40,7 @@ class cliente{
     }
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM cliente WHERE id_cliente = :id");
-        $stmt->bindParam(":id", $id_cliente);
+        $stmt->bindParam(":id", $this->id_cliente);
         return $stmt->execute();
     }
     public function update(){

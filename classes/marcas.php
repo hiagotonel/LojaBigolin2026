@@ -17,7 +17,7 @@ class marcas{
     public function setID($id_marca){ $this->id_marca = $id_marca;}
     public function setNome($nome){ $this->nome = $nome;}
     public function setPais($pais){ $this->pais = $pais;}
-    public function salvar(){
+    public function insert(){
         if($this->id_marca){
             $this->update();
         }
@@ -30,7 +30,7 @@ class marcas{
     }
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM marcas WHERE id_marca = :id");
-        $stmt->bindParam(":id", $id_marca);
+        $stmt->bindParam(":id", $this->id_marca);
         return $stmt->execute();
     }
     public function update(){

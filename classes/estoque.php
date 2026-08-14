@@ -17,7 +17,7 @@ class estoque{
     public function setID($id_estoque){ $this->id_estoque = $id_estoque;}
     public function setQuantidade($quantidade){ $this->quantidade = $quantidade;}
     public function setPavilhao($pavilhao){ $this->pavilhao = $pavilhao;}
-    public function salvar(){
+    public function insert(){
         if($this->id_estoque){
             $this->update();
         }
@@ -30,7 +30,7 @@ class estoque{
     }
     public function delete(){
         $stmt = $this->pdo->prepare("DELETE FROM estoque WHERE id_estoque = :id");
-        $stmt->bindParam(":id", $id_estoque);
+        $stmt->bindParam(":id", $this->id_estoque);
         return $stmt->execute();
     }
     public function update(){
