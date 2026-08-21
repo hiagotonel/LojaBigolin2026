@@ -1,33 +1,48 @@
 <?php
-    require_once "../conexao.php";
-    $pdo = getConexao();
-    require_once "../select/select_opcoes.php";
-    $marcas = getMarcas($pdo);
-    $setores = getSetores($pdo);
+require_once "../classes/produto.php";
 
-    if (isset($_GET['id_produto'])){
-        extract($_GET);
-        $acao = "../update/update_produto.php?id_produto=$id_produto";
-        $titulo = "Digite os dados que deseja atualizar";
-        try {
-            $sql = "SELECT * FROM produto 
-                    WHERE id_produto = :id_produto";
-            $stmt = $pdo->prepare($sql);
+$produtoObj = new Produto();
+$listaProdutos = Produto::selectAll();
+$dadosProduto = ['id_produto' => '', 'id_marca' => '', 'id_setor' => '', 'nome' => '', 'preco' => '', 'descricao' => '', 'status' => ''];
+$tituloForm = "Cadastrar Produto";
 
-            $stmt->execute(
-                [':id_produto' => $id_produto]
-            );
-
-            $resultado = $stmt->fetchAll();
-            $produto = $resultado[0]; 
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
-    }else{
-        $acao = '../insert/insert_produto.php';
-        $titulo = "Digite os dados";
-        $produto = [ 'nome' => '', 'id_marca' => '', 'id_setor' => '', 'preco' => '', 'descricao' => '', 'status' => '' ];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    if (isset($_POST['acao']) && $_POST['acao'] === 'deletar' && !empty($_POST['id_produto'])) {
+        $produtoObj->setID($_POST['id_produto']);
+        $produtoObj->delete();
+        header("Location: form_produto.php");
+        exit;
     }
+
+    else if (isset($_POST['acao']) && $_POST['acao'] === 'carregar_edicao' && !empty($_POST['id_produto'])) {
+        $produtoObj->setID($_POST['id_produto']);
+        $registro = $produtoObj->select();
+        if ($registro) {
+            $dadosProduto = $registro;
+            $tituloForm = "Atualizar Produto";
+        }
+    }
+
+    else if (isset($_POST['nome'])) {
+        $produtoObj->setIdMarca($_POST['id_marca']);
+        $produtoObj->setIdSetor($_POST['id_setor']);
+        $produtoObj->setNome($_POST['nome']);
+        $produtoObj->setPreco($_POST['preco']);
+        $produtoObj->setDescricao($_POST['descricao']);
+        $produtoObj->setStatus($_POST['status']);
+
+        if (!empty($_POST['id_produto'])) {
+            $produtoObj->setID($_POST['id_produto']);
+            $produtoObj->update();
+        } else {
+            $produtoObj->insert();
+        }
+
+        header("Location: form_produto.php");
+        exit;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -35,82 +50,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
-    <title><?= $titulo?></title>
+    <title>Loja Bigolin</title>
 </head>
 <body>
     <?php require "../pages/header.php"; ?>
+
     <main>
-        <h1>Digite os dados do produto</h1>
-        <form action="<?= $acao ?>" method="post" enctype="multipart/form-data">
-            <label> Nome <input type="text" name="nome" value="<?= $produto['nome'] ?>"> </label>
-            <label> Marca 
-                <select name="id_marca" required>
-                    <option value="">Selecione a marca</option>
-                    <?php foreach ($marcas as $marca): ?>
-                        <option value="<?= htmlspecialchars($marca['id_marca']) ?>" <?= $produto['id_marca'] == $marca['id_marca'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($marca['nome']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select> 
+        <h1><?= $tituloForm ?></h1>
+
+        <form action="form_produto.php" method="POST">
+            <input type="hidden" name="id_produto" value="<?= $dadosProduto['id_produto'] ?>">
+
+            <label>
+                ID Marca
+                <input type="number" name="id_marca" value="<?= htmlspecialchars($dadosProduto['id_marca']) ?>" required>
             </label>
-            <label> Setor 
-                <select name="id_setor" required>
-                    <option value="">Selecione o setor</option>
-                    <?php foreach ($setores as $setor): ?>
-                        <option value="<?= htmlspecialchars($setor['id_setor']) ?>" <?= $produto['id_setor'] == $setor['id_setor'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($setor['nome']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select> 
+
+            <label>
+                ID Setor
+                <input type="number" name="id_setor" value="<?= htmlspecialchars($dadosProduto['id_setor']) ?>" required>
             </label>
-            <label> Preço <input type="text" name="preco" value="<?= $produto['preco'] ?>"> </label>
-            <label> Descrição <input type="text" name="descricao" value="<?= $produto['descricao'] ?>"> </label>
-            <label> Status <input type="text" name="status" value="<?= isset($produto['status']) ? $produto['status'] : '' ?>"> </label>
+
+            <label>
+                Nome
+                <input type="text" name="nome" value="<?= htmlspecialchars($dadosProduto['nome']) ?>" required>
+            </label>
+
+            <label>
+                Preço
+                <input type="text" name="preco" value="<?= htmlspecialchars($dadosProduto['preco']) ?>" required>
+            </label>
+
+            <label>
+                Descrição
+                <input type="text" name="descricao" value="<?= htmlspecialchars($dadosProduto['descricao']) ?>">
+            </label>
+
+            <label>
+                Status
+                <input type="text" name="status" value="<?= htmlspecialchars($dadosProduto['status']) ?>">
+            </label>
+
             <button type="submit">Salvar</button>
+            <?php if (!empty($dadosProduto['id_produto'])): ?>
+                <a href="form_produto.php" class="botao" style="background-color: var(--fundo-destaque); color: var(--texto-principal); margin-top: 6px;">Cancelar Edição</a>
+            <?php endif; ?>
         </form>
 
-        <table border>
-        <tr>
-            <td>id_produto</td>
-            <td>id_marca</td>
-            <td>id_setor</td>
-            <td>nome</td>
-            <td>preco</td>
-            <td>descricao</td>
-        </tr>
-    <?php 
-        $sql = "SELECT * FROM produto ORDER BY id_produto DESC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $produtos = $stmt->fetchAll();
-        foreach($produtos as $p):
-        ?>
-        <tr>
-            <td>
-                <?= $p['id_produto'] ?>
-            </td>
-            <td>
-                <?= $p['id_marca'] ?>
-            </td>
-            <td>
-                <?= $p['id_setor'] ?>
-            </td>
-            <td>
-                <?= $p['nome'] ?>
-            </td>
-            <td>
-                <?= $p['preco'] ?>
-            </td>
-            <td>
-                <?= $p['descricao'] ?>
-            </td>
-            <td>
-                <a href="../delete/deletar.php?nome_tabela=produto&id=<?= $p['id_produto'] ?>">[X]</a>
-                <a href="form_produto.php?id_produto=<?= $p['id_produto'] ?>">Editar</a>   
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
+        <table>
+            <tr>
+                <td>ID</td>
+                <td>Marca</td>
+                <td>Setor</td>
+                <td>Nome</td>
+                <td>Preço</td>
+                <td>Descrição</td>
+                <td>Status</td>
+                <td>Ações</td>
+            </tr>
+            <?php foreach ($listaProdutos as $p): ?>
+            <tr>
+                <td><?= $p['id_produto'] ?></td>
+                <td><?= htmlspecialchars($p['id_marca']) ?></td>
+                <td><?= htmlspecialchars($p['id_setor']) ?></td>
+                <td><?= htmlspecialchars($p['nome']) ?></td>
+                <td><?= htmlspecialchars($p['preco']) ?></td>
+                <td><?= htmlspecialchars($p['descricao']) ?></td>
+                <td><?= htmlspecialchars($p['status']) ?></td>
+                <td>
+                    <form action="form_produto.php" method="POST" style="display:inline; margin:0; padding:0;" onsubmit="return confirm('Deseja excluir este produto?')">
+                        <input type="hidden" name="acao" value="deletar">
+                        <input type="hidden" name="id_produto" value="<?= $p['id_produto'] ?>">
+                        <button type="submit" style="display:inline-block; padding:4px 8px; font-size:0.8rem; margin:0; cursor:pointer; background-color:#3b181a; color:#f87171; border:1px solid #7f1d1d; border-radius:4px; font-weight:700;">[X]</button>
+                    </form>
+
+                    <form action="form_produto.php" method="POST" style="display:inline; margin:0; padding:0;">
+                        <input type="hidden" name="acao" value="carregar_edicao">
+                        <input type="hidden" name="id_produto" value="<?= $p['id_produto'] ?>">
+                        <button type="submit" style="display:inline-block; padding:4px 8px; font-size:0.8rem; margin:0; cursor:pointer; background-color:#1e293b; color:#93c5fd; border:1px solid #334155; border-radius:4px; font-weight:600;">Editar</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
     </main>
 </body>
 </html>

@@ -1,29 +1,43 @@
 <?php
-require_once '../conexao.php';
-$pdo = getConexao();
+require_once "../classes/marcas.php";
 
-if (isset($_GET['id_marca'])){
-    extract($_GET);
-    $acao = "../update/update_marca.php?id_marca=$id_marca";
-    $titulo = "Digite os dados que deseja atualizar";
-    try {
-        $sql = "SELECT * FROM marcas 
-                WHERE id_marca = :id_marca";
-        $stmt = $pdo->prepare($sql);
+$marcaObj = new Marcas();
+$listaMarcas = Marcas::selectAll();
+$dadosMarca = ['id_marca' => '', 'nome' => '', 'pais' => ''];
+$tituloForm = "Cadastrar Marca";
 
-        $stmt->execute(
-            [':id_marca' => $id_marca]
-        );
-
-        $resultado = $stmt->fetchAll();
-        $marca = $resultado[0]; 
-    } catch (PDOException $e) {
-        echo "Erro: " . $e->getMessage();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    if (isset($_POST['acao']) && $_POST['acao'] === 'deletar' && !empty($_POST['id_marca'])) {
+        $marcaObj->setID($_POST['id_marca']);
+        $marcaObj->delete();
+        header("Location: form_marca.php");
+        exit;
     }
-}else{
-    $acao = '../insert/insert_marca.php';
-    $titulo = "Digite os dados";
-    $marca = [ 'nome' => '', 'pais' => '' ];
+
+    else if (isset($_POST['acao']) && $_POST['acao'] === 'carregar_edicao' && !empty($_POST['id_marca'])) {
+        $marcaObj->setID($_POST['id_marca']);
+        $registro = $marcaObj->select();
+        if ($registro) {
+            $dadosMarca = $registro;
+            $tituloForm = "Atualizar Marca";
+        }
+    }
+
+    else if (isset($_POST['nome'])) {
+        $marcaObj->setNome($_POST['nome']);
+        $marcaObj->setPais($_POST['pais']);
+
+        if (!empty($_POST['id_marca'])) {
+            $marcaObj->setID($_POST['id_marca']);
+            $marcaObj->update();
+        } else {
+            $marcaObj->insert();
+        }
+
+        header("Location: form_marca.php");
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -32,48 +46,61 @@ if (isset($_GET['id_marca'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
-    <title><?= $titulo?></title>
+    <title>Loja Bigolin</title>
 </head>
 <body>
     <?php require "../pages/header.php"; ?>
+
     <main>
-        <h1>Digite os dados da Marca</h1>
-        <form action="<?= $acao ?>" method="post" enctype="multipart/form-data">
-            <label> Nome <input type="text" name="nome" value="<?= $marca['nome'] ?>"> </label>
-            <label> País <input type="text" name="pais" value="<?= $marca['pais'] ?>"> </label>
+        <h1><?= $tituloForm ?></h1>
+
+        <form action="form_marca.php" method="POST">
+            <input type="hidden" name="id_marca" value="<?= $dadosMarca['id_marca'] ?>">
+
+            <label>
+                Nome
+                <input type="text" name="nome" value="<?= htmlspecialchars($dadosMarca['nome']) ?>" required>
+            </label>
+
+            <label>
+                País
+                <input type="text" name="pais" value="<?= htmlspecialchars($dadosMarca['pais']) ?>">
+            </label>
+
             <button type="submit">Salvar</button>
+            <?php if (!empty($dadosMarca['id_marca'])): ?>
+                <a href="form_marca.php" class="botao" style="background-color: var(--fundo-destaque); color: var(--texto-principal); margin-top: 6px;">Cancelar Edição</a>
+            <?php endif; ?>
         </form>
 
-        <table border>
-        <tr>
-            <td>id_marca</td>
-            <td>nome</td>
-            <td>pais</td>
-        </tr>
-    <?php 
-        $sql = "SELECT * FROM marcas ORDER BY id_marca DESC";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        $marcas = $stmt->fetchAll();
-        foreach($marcas as $m):
-        ?>
-        <tr>
-            <td>
-                <?= $m['id_marca'] ?>
-            </td>
-            <td>
-                <?= $m['nome'] ?>
-            </td>
-            <td>
-                <?= $m['pais'] ?>
-            </td>
-            <td>
-                <a href="../delete/deletar.php?nome_tabela=marcas&id=<?= $m['id_marca'] ?>">[X]</a>
-                <a href="form_marca.php?id_marca=<?= $m['id_marca'] ?>">Editar</a>   
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
+        <table>
+            <tr>
+                <td>ID</td>
+                <td>Nome</td>
+                <td>País</td>
+                <td>Ações</td>
+            </tr>
+            <?php foreach ($listaMarcas as $m): ?>
+            <tr>
+                <td><?= $m['id_marca'] ?></td>
+                <td><?= htmlspecialchars($m['nome']) ?></td>
+                <td><?= htmlspecialchars($m['pais']) ?></td>
+                <td>
+                    <form action="form_marca.php" method="POST" style="display:inline; margin:0; padding:0;" onsubmit="return confirm('Deseja excluir esta marca?')">
+                        <input type="hidden" name="acao" value="deletar">
+                        <input type="hidden" name="id_marca" value="<?= $m['id_marca'] ?>">
+                        <button type="submit" style="display:inline-block; padding:4px 8px; font-size:0.8rem; margin:0; cursor:pointer; background-color:#3b181a; color:#f87171; border:1px solid #7f1d1d; border-radius:4px; font-weight:700;">[X]</button>
+                    </form>
+
+                    <form action="form_marca.php" method="POST" style="display:inline; margin:0; padding:0;">
+                        <input type="hidden" name="acao" value="carregar_edicao">
+                        <input type="hidden" name="id_marca" value="<?= $m['id_marca'] ?>">
+                        <button type="submit" style="display:inline-block; padding:4px 8px; font-size:0.8rem; margin:0; cursor:pointer; background-color:#1e293b; color:#93c5fd; border:1px solid #334155; border-radius:4px; font-weight:600;">Editar</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
     </main>
 </body>
 </html>
