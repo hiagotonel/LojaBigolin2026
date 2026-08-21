@@ -52,6 +52,9 @@ class Setor {
         $stmt = $this->pdo->prepare("SELECT * FROM setor WHERE id_setor = :id");
         $stmt->bindParam(":id", $this->id_setor);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setNome($dados['nome']);
+        $this->setDescricao($dados['descricao']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

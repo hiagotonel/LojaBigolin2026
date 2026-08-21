@@ -72,6 +72,13 @@ class Pedido {
         $stmt = $this->pdo->prepare("SELECT * FROM pedido WHERE id_pedido = :id");
         $stmt->bindParam(":id", $this->id_pedido);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setIdCliente($dados['id_cliente']);
+        $this->setIdProduto($dados['id_produto']);
+        $this->setPreco($dados['preco']);
+        $this->setQuantidade($dados['quantidade']);
+        $this->setStatus($dados['status']);
+        $this->setData($dados['data']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

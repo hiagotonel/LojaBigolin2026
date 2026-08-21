@@ -68,6 +68,11 @@ class Cliente {
         $stmt = $this->pdo->prepare("SELECT * FROM cliente WHERE id_cliente = :id");
         $stmt->bindParam(":id", $this->id_cliente);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setNome($dados['nome']);
+        $this->setEmail($dados['email']);
+        $this->setTelefone($dados['telefone']);
+        $this->setCpf($dados['cpf']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

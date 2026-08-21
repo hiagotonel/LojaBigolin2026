@@ -72,6 +72,13 @@ class Produto {
         $stmt = $this->pdo->prepare("SELECT * FROM produto WHERE id_produto = :id");
         $stmt->bindParam(":id", $this->id_produto);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setIdMarca($dados['id_marca']);
+        $this->setIdSetor($dados['id_setor']);
+        $this->setNome($dados['nome']);
+        $this->setPreco($dados['preco']);
+        $this->setDescricao($dados['descricao']);
+        $this->setStatus($dados['status']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

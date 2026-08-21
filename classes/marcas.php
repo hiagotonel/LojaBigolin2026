@@ -52,6 +52,9 @@ class Marcas {
         $stmt = $this->pdo->prepare("SELECT * FROM marcas WHERE id_marca = :id");
         $stmt->bindParam(":id", $this->id_marca);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setNome($dados['nome']);
+        $this->setPais($dados['pais']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

@@ -57,6 +57,10 @@ class Estoque {
         $stmt = $this->pdo->prepare("SELECT * FROM estoque WHERE id_estoque = :id");
         $stmt->bindParam(":id", $this->id_estoque);
         $stmt->execute();
+        $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->setIdProduto($dados['id_produto']);
+        $this->setPavilhao($dados['pavilhao']);
+        $this->setQuantidade($dados['quantidade']);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
