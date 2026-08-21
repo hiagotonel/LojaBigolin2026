@@ -23,7 +23,11 @@ class Marcas {
         $stmt = $this->pdo->prepare("INSERT INTO marcas (nome, pais) VALUES (:nome, :pais)");
         $stmt->bindParam(":nome", $this->nome);
         $stmt->bindParam(":pais", $this->pais);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_marca = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function update() {
@@ -31,7 +35,11 @@ class Marcas {
         $stmt->bindParam(":nome", $this->nome);
         $stmt->bindParam(":pais", $this->pais);
         $stmt->bindParam(":id", $this->id_marca);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_marca = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function delete() {

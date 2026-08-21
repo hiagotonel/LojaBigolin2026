@@ -39,7 +39,11 @@ class Produto {
         $stmt->bindParam(":preco", $this->preco);
         $stmt->bindParam(":descricao", $this->descricao);
         $stmt->bindParam(":status", $this->status);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_produto = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function update() {
@@ -51,7 +55,11 @@ class Produto {
         $stmt->bindParam(":descricao", $this->descricao);
         $stmt->bindParam(":status", $this->status);
         $stmt->bindParam(":id", $this->id_produto);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_produto = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function delete() {

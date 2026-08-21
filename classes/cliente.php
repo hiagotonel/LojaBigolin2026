@@ -34,7 +34,11 @@ class Cliente {
         $stmt->bindParam(":cpf", $this->cpf);
         $stmt->bindParam(":telefone", $this->telefone);
         $stmt->bindParam(":email", $this->email);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_cliente = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     // Atualizar cliente existente
@@ -45,7 +49,11 @@ class Cliente {
         $stmt->bindParam(":telefone", $this->telefone);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":id", $this->id_cliente);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_cliente = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     // Deletar cliente

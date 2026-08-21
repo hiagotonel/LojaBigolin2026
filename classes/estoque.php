@@ -27,7 +27,11 @@ class Estoque {
         $stmt->bindParam(":id_produto", $this->id_produto);
         $stmt->bindParam(":quantidade", $this->quantidade);
         $stmt->bindParam(":pavilhao", $this->pavilhao);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_estoque = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function update() {
@@ -36,7 +40,11 @@ class Estoque {
         $stmt->bindParam(":quantidade", $this->quantidade);
         $stmt->bindParam(":pavilhao", $this->pavilhao);
         $stmt->bindParam(":id", $this->id_estoque);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        if($ok){
+            $this->id_estoque = $this->pdo->lastInsertId();
+        }
+        return $ok;
     }
 
     public function delete() {
