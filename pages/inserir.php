@@ -12,22 +12,22 @@
     <h1>O que deseja inserir?</h1>
     <ul>
         <li>
-            <a href="../forms_insert/form_produto.php">Produto</a>
+            <a href="../forms/form_produto.php">Produto</a>
         </li>
         <li>
-            <a href="../forms_insert/form_cliente.php">Cliente</a>
+            <a href="../forms/form_cliente.php">Cliente</a>
         </li>
         <li>
-            <a href="../forms_insert/form_pedido.php">Pedido</a>
+            <a href="../forms/form_pedido.php">Pedido</a>
         </li>
         <li>
-            <a href="../forms_insert/form_estoque.php">Estoque</a>
+            <a href="../forms/form_estoque.php">Estoque</a>
         </li>
         <li>
-            <a href="../forms_insert/form_marca.php">Marca</a>
+            <a href="../forms/form_marca.php">Marca</a>
         </li>
         <li>
-            <a href="../forms_insert/form_setor.php">Setor</a>
+            <a href="../forms/form_setor.php">Setor</a>
         </li>
     </ul>
 </body>
