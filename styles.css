@@ -1,0 +1,324 @@
+/* ==========================================================================
+   Loja Bigolin - CSS Modo Escuro (Cores Planas, Simples e Direto)
+   Nomes de classes e seletores em Português
+   ========================================================================== */
+
+:root {
+    /* Cores de fundo e estrutura */
+    --fundo-pagina: #111317;
+    --fundo-conteudo: #1a1d24;
+    --fundo-destaque: #222630;
+    --fundo-campo: #14171d;
+
+    /* Bordas */
+    --borda: #2e3440;
+    --borda-foco: #3b82f6;
+
+    /* Textos */
+    --texto-principal: #f0f3f6;
+    --texto-secundario: #94a3b8;
+
+    /* Cores de ação planas */
+    --azul-principal: #3b82f6;
+    --azul-hover: #2563eb;
+    --vermelho-excluir: #ef4444;
+    --vermelho-hover: #dc2626;
+    --amarelo-editar: #f59e0b;
+    --amarelo-hover: #d97706;
+
+    --fonte: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Zerar margens padrão */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: var(--fonte);
+    background-color: var(--fundo-pagina);
+    color: var(--texto-principal);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================================================================
+   Cabeçalho / Menu Superior (header)
+   ========================================================================== */
+header {
+    width: 100%;
+    background-color: var(--fundo-conteudo);
+    border-bottom: 1px solid var(--borda);
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+header ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header li a {
+    text-decoration: none;
+    color: var(--texto-secundario);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 4px;
+    display: block;
+}
+
+header li a:hover {
+    background-color: var(--fundo-destaque);
+    color: var(--texto-principal);
+}
+
+/* ==========================================================================
+   Área Principal (main)
+   ========================================================================== */
+main {
+    width: 90%;
+    max-width: 950px;
+    min-height: 70vh;
+    background-color: var(--fundo-conteudo);
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+    margin: 0 auto 30px auto;
+    padding: 24px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--texto-principal);
+    text-align: center;
+    width: 100%;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--borda);
+}
+
+main h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--texto-secundario);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Menus de links simples (como na página inicial e páginas de opções) */
+main ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+}
+
+main li a {
+    text-decoration: none;
+    color: var(--texto-principal);
+    background-color: var(--fundo-destaque);
+    border: 1px solid var(--borda);
+    padding: 12px 18px;
+    display: block;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+main li a:hover {
+    background-color: var(--azul-principal);
+    border-color: var(--azul-principal);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   Formulários (Cadastrar e Atualizar)
+   ========================================================================== */
+main form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 500px;
+    margin: 15px auto 30px auto;
+}
+
+main form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--texto-secundario);
+    text-align: left;
+}
+
+main form input,
+main form select,
+main form textarea {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background-color: var(--fundo-campo);
+    color: var(--texto-principal);
+    border: 1px solid var(--borda);
+    border-radius: 4px;
+    outline: none;
+}
+
+main form input:focus,
+main form select:focus,
+main form textarea:focus {
+    border-color: var(--borda-foco);
+}
+
+main form button {
+    padding: 11px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: #ffffff;
+    background-color: var(--azul-principal);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+main form button:hover {
+    background-color: var(--azul-hover);
+}
+
+/* ==========================================================================
+   Tabelas de Dados (selects e formulários)
+   ========================================================================== */
+main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    background-color: var(--fundo-conteudo);
+    border: 1px solid var(--borda);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+main table tr:first-child td,
+main table th {
+    background-color: var(--fundo-destaque);
+    color: var(--texto-principal);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--borda);
+}
+
+main table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--borda);
+    color: var(--texto-principal);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+main table tr:last-child td {
+    border-bottom: none;
+}
+
+main table tr:hover td {
+    background-color: var(--fundo-destaque);
+}
+
+/* Links de Ação na Tabela (Excluir e Editar) */
+main table td a[href*="deletar.php"] {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #3b181a;
+    color: #f87171;
+    border: 1px solid #7f1d1d;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+main table td a[href*="deletar.php"]:hover {
+    background-color: var(--vermelho-excluir);
+    color: #ffffff;
+    border-color: var(--vermelho-excluir);
+}
+
+main table td a[href*="form_"] {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #1e293b;
+    color: #93c5fd;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+main table td a[href*="form_"]:hover {
+    background-color: var(--azul-principal);
+    color: #ffffff;
+    border-color: var(--azul-principal);
+}
+
+/* ==========================================================================
+   Classes Utilitárias em Português
+   ========================================================================== */
+.botao {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    text-align: center;
+}
+
+.botao-azul {
+    background-color: var(--azul-principal);
+    color: #ffffff;
+}
+
+.botao-azul:hover {
+    background-color: var(--azul-hover);
+}
+
+.botao-vermelho {
+    background-color: var(--vermelho-excluir);
+    color: #ffffff;
+}
+
+.botao-vermelho:hover {
+    background-color: var(--vermelho-hover);
+}
+
+.tabela-container {
+    width: 100%;
+    overflow-x: auto;
+}
