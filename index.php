@@ -3,6 +3,22 @@
 
     $modulo = $_GET['modulo'] ?? 'cliente';
     $acao = $_GET['acao'] ?? 'listar';
+
+    $controllerNome = ucfirst($modulo) . "Controller";
+    $arquivoController = "controllers/{$controllerNome}.php";
+
+    if (file_exists($arquivoController)){
+        require_once $arquivoController;
+        $controller = new $controllerNome($db);
+        if(method_exists($controller, $acao)){
+            $controller->$acao;
+        }
+        else{
+            echo "Ação não encontrada!";
+        }
+    } else {
+        echo "Página não encontrada";
+    }
 ?>
 
 <!DOCTYPE html>
