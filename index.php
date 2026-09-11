@@ -1,3 +1,10 @@
+<?php 
+    require_once "confih.php";
+
+    $modulo = $_GET['modulo'] ?? 'cliente';
+    $acao = $_GET['acao'] ?? 'listar';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

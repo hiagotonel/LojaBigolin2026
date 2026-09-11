@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/pedido.php";
+require_once "../models/pedido.php";
 
 $pedidoObj = new Pedido();
 $listaPedidos = Pedido::selectAll();

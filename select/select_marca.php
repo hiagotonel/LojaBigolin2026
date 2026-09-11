@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/marcas.php";
+require_once "../models/marcas.php";
 
 $marcaObj = new Marcas();
 $listaMarcas = Marcas::selectAll();

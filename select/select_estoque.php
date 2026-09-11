@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/estoque.php";
+require_once "../models/estoque.php";
 
 $estoqueObj = new Estoque();
 $listaEstoque = Estoque::selectAll();

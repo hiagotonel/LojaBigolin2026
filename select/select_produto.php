@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/produto.php";
+require_once "../models/produto.php";
 
 $produtoObj = new Produto();
 $listaProdutos = Produto::selectAll();

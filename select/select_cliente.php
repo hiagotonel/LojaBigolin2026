@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/cliente.php";
+require_once "../models/cliente.php";
 
 $clienteObj = new Cliente();
 $listaClientes = Cliente::selectAll();

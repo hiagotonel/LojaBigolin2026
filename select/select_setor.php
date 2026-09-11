@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/setor.php";
+require_once "../models/setor.php";
 
 $setorObj = new Setor();
 $listaSetores = Setor::selectAll();
