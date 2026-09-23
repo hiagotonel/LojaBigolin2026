@@ -1,10 +1,10 @@
 function usuario(nome,data_nasc,email,senha){
     this.nome = nome;
-    this.data_nasc = new Date(data_nasc);
-    this.idade = calcula_idade(this.data_nasc)
-    this.email = email;
+    let email = email;
+    let data_nasc = new Date(data_nasc);
+    let idade = calcula_idade(this.data_nasc);
     this.cadastro = new Date();
-    let senha = senha;
+    let senha = senha_forte(senha);
 
     this.calcula_idade = function(){
         const hoje = new Date()
@@ -21,5 +21,14 @@ function usuario(nome,data_nasc,email,senha){
         let tempo_calc = this.cadastro.getDate() - hoje.getDate();
         let tempo = new Date(tempo_calc);
         return tempo;
+    }
+
+    this.senha_forte = function(senha){
+        if(senha !== senha.toLowerCase() && senha !== senha.toUpperCase()){
+            return senha;
+        }
+        else{
+            throw new Exception("A senha é inválida");
+        }
     }
 }
